@@ -17,6 +17,8 @@ import RPi.GPIO as GPIO
 import time as time
 from time import sleep
 
+blinkPerFrame = []
+
 WORKSPACE_PATH = '../Tensorflow/workspace'
 SCRIPTS_PATH = '../Tensorflow/scripts'
 APIMODEL_PATH = '../Tensorflow/models'
@@ -45,15 +47,14 @@ def detect_fn(image):
 
 #ret: blinks per second
 def detectBlink(blinkPerFrame, framerate):
-    FRAME_GAP = 50
-	if len(blinkPerFrame) < FRAME_GAP: 
-		return 0
-
-	else
+    FRAME_GAP = 120
+	if len(blinkPerFrame) < FRAME_GAP:
+        return 0
+	else:
 		total = 0
 		for i in range(FRAME_GAP):
-			total = total + blinkPerFram(len(blinkPerFrame) - i)
-		blinkRate = total/FRAME_GAP
+			total = total + blinkPerFrame(len(blinkPerFrame) - i)
+		blinkRate = (total / FRAME_GAP) * framerate
 		return blinkRate
 
 #@param blinks per second
@@ -124,6 +125,11 @@ while True:
     for i in range(min(max_boxes_to_draw, boxes.shape[0])):
         if scores is None or scores[i] > min_score_thresh:
             print (str(scores[i] * 100) + "%", detections['detection_classes'][i])
+            # 1 is blink
+            isBlink = 1 if detections['detection_classes'][i] == 0 else 0;
+            blinkPerFrame.append(isBlink)
+            bps = detectBlink(blinkPerFrame,60)
+            isTired(bps)
 
     cv2.imshow('object detection',  cv2.resize(image_np_with_detections, (800, 600)))
     
