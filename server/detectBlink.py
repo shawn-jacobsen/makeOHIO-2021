@@ -1,5 +1,4 @@
 # detects blink and POSTS endpoint with data
-
 import cv2
 import numpy as np
 from matplotlib import pyplot as plt
@@ -13,6 +12,10 @@ import tensorflow as tf
 from object_detection.utils import config_util
 from object_detection.protos import pipeline_pb2
 from google.protobuf import text_format
+
+import RPi.GPIO as GPIO
+import time as time
+from time import sleep
 
 WORKSPACE_PATH = '../Tensorflow/workspace'
 SCRIPTS_PATH = '../Tensorflow/scripts'
@@ -40,6 +43,34 @@ def detect_fn(image):
     detections = detection_model.postprocess(prediction_dict, shapes)
     return detections
 
+#ret: blinks per second
+def detectBlink(blinkPerFrame, framerate):
+    FRAME_GAP = 50
+	if len(blinkPerFrame) < FRAME_GAP: 
+		return 0
+
+	else
+		total = 0
+		for i in range(FRAME_GAP):
+			total = total + blinkPerFram(len(blinkPerFrame) - i)
+		blinkRate = total/FRAME_GAP
+		return blinkRate
+
+#@param blinks per second
+def isTired(blinkRate):
+    GPIO.setmode(GPIO.BCM)
+	ABR = 0.1
+    buzzer = 14
+    GPIO.setup(buzzer,GPIO.OUT)
+    tired = blinkRate>ABR
+	if tired:
+        for i in range(3)
+            GPIO.output(buzzer,GPIO.HIGH)
+            sleep(.2)
+            GPIO.output(buzzer,GPIO.LOW)
+            sleep(.2)
+	return tired
+
 category_index = label_map_util.create_category_index_from_labelmap(ANNOTATION_PATH+'/label_map.pbtxt')
 
 # Setup capture
@@ -48,6 +79,12 @@ width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
 height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
 while True:
+    #lidar stuff
+    dist = 6 
+    while dist > 5: 
+        dist = #lidar dist 
+
+
     ret, frame = cap.read()
     image_np = np.array(frame)
 
