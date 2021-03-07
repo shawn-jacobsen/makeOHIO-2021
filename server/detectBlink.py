@@ -17,6 +17,8 @@ import RPi.GPIO as GPIO
 import time as time
 from time import sleep
 
+import adafruit_vl6180x
+
 blinkPerFrame = []
 
 WORKSPACE_PATH = '../Tensorflow/workspace'
@@ -79,12 +81,10 @@ cap = cv2.VideoCapture(1)
 width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
 height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
-while True:
-    #lidar stuff
-    dist = 6 
-    while dist > 5: 
-        dist = #lidar dist 
+# lidar
+sensor = adafruit_vl6180x.VL6180X(i2c)
 
+while True:
 
     ret, frame = cap.read()
     image_np = np.array(frame)
@@ -113,6 +113,12 @@ while True:
                 min_score_thresh=.5,
                 agnostic_mode=False)
 
+    cv2.imshow('object detection',  cv2.resize(image_np_with_detections, (800, 600)))
+
+    #lidar stuff
+    if sensor.range > 5:
+        continue
+
     # This is the way I'm getting my coordinates
     boxes = detections['detection_boxes']
     # get all boxes from an array
@@ -130,8 +136,6 @@ while True:
             blinkPerFrame.append(isBlink)
             bps = detectBlink(blinkPerFrame,60)
             isTired(bps)
-
-    cv2.imshow('object detection',  cv2.resize(image_np_with_detections, (800, 600)))
     
     if cv2.waitKey(1) & 0xFF == ord('q'):
         cap.release()
