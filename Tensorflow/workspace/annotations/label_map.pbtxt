@@ -1,0 +1,8 @@
+item { 
+	name:'blink'
+	id:1
+}
+item { 
+	name:'open'
+	id:2
+}
