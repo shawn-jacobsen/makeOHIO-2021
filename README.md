@@ -7,6 +7,10 @@ Wake are wearable glasses that use a deep learning vision model built on TensorF
 |-|-|
 ![product-image](https://github.com/shawn-jacobsen/makeOHIO-2021/blob/main/product-image.jpg)  |  ![using the product - image](https://github.com/shawn-jacobsen/makeOHIO-2021/blob/main/image1.png)
 
+## Awards & Recognitions
+- 1st place for the **Honda "In Vehicle Health" Challenge**
+- 1st place for the **Most Techincally Difficult** award
+
 ## Contributors
 - Shawn Jacobsen
 - Gary Sung
